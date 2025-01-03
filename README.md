@@ -10,6 +10,7 @@ OS: tested on AWS EC2 AMI
 Ansible Galaxy Role: gantsign.minikube
 
 <h2> Steps to Run </h2>
+
 1) Clone the repo
 2) Pull the galaxy role
    ansible-galaxy install gantsign.minikube
