@@ -1,0 +1,45 @@
+---
+# tasks/main.yml
+
+- name: Install Docker
+  become: yes
+  package:
+    name: docker
+    state: present
+
+- name: Start Docker Service
+  become: yes
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: Ensure the current user is in the Docker group
+  become: yes
+  user:
+    name: "{{ ansible_user }}"
+    group: docker
+    append: yes
+    state: present
+
+- name: Ensure the Docker group is applied without logging out
+  become: no
+  command: newgrp docker
+  changed_when: false
+
+- name: Check Docker group membership
+  become: no
+  command: id -nG
+  register: user_groups
+  changed_when: false
+
+- name: Display current groups of the user
+  debug:
+    var: user_groups.stdout
+
+- name: Restart Docker Service if needed
+  become: yes
+  service:
+    name: docker
+    state: restarted
+  when: ansible_facts['distribution'] == 'Ubuntu' or ansible_facts['distribution'] == 'Debian'

@@ -1,0 +1,11 @@
+---
+- name: Install Docker and Minikube
+  hosts: localhost
+  connection: local  # Use local connection, no SSH
+  become: yes  # Enable privilege escalation to root
+  become_user: root  # Execute tasks as the root user
+  vars:
+    ansible_user: ec2-user
+  roles:
+    - myminikube
+

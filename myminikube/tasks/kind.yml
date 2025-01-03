@@ -1,0 +1,44 @@
+# tasks/main.yml
+---
+- name: Install dependencies (curl, wget, etc.)
+  become: yes
+  package:
+    name:
+      - curl
+      - wget
+    state: present
+
+- name: Install kubectl using curl
+  become: yes
+  shell: |
+    curl -LO "https://dl.k8s.io/release/v1.26.0/bin/linux/amd64/kubectl"
+    chmod +x kubectl
+    mv kubectl /usr/local/bin/kubectl
+
+- name: Install kind (Kubernetes in Docker)
+  become: yes
+  shell: |
+    curl -Lo kind https://github.com/kubernetes-sigs/kind/releases/download/v0.17.0/kind-linux-amd64
+    chmod +x kind
+    mv kind /usr/local/bin/kind
+
+- name: Verify kubectl installation
+  become: no
+  command: kubectl version --client
+  register: kubectl_version
+  changed_when: false
+
+- name: Verify kind installation
+  become: no
+  command: kind version
+  register: kind_version
+  changed_when: false
+
+- name: Show kubectl version
+  debug:
+    var: kubectl_version.stdout
+
+- name: Show kind version
+  debug:
+    var: kind_version.stdout
+

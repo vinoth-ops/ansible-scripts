@@ -1,0 +1,15 @@
+---
+# Main tasks file for myminikube
+
+- name: Install Docker
+  include_tasks: docker.yml
+
+- name: Install Minikube
+  include_tasks: minikube.yml
+  tags:
+    - minikube
+
+- name: Install Kind and Kubectl
+  include_tasks: kind.yml
+  tags:
+    - kind
